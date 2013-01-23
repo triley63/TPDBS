@@ -9,3 +9,7 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+
+:r .\AddTeaPartyData.sql
+:r .\AddAddressTypeData.sql
+:r .\AddContactTypeData.sql
