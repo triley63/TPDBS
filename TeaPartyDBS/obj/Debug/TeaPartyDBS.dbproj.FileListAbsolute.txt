@@ -1,8 +1,8 @@
-D:\Projects\TeaPartySolution\TeaPartyDBS\sql\debug\TeaPartyDBS.deploymanifest
-D:\Projects\TeaPartySolution\TeaPartyDBS\sql\debug\TeaPartyDBS.dbschema
-D:\Projects\TeaPartySolution\TeaPartyDBS\obj\Debug\TeaPartyDBS.dbschema
 D:\Projects\TeaPartySolution\TeaPartyDBS\sql\debug\TeaParty_Script.PreDeployment.sql
 D:\Projects\TeaPartySolution\TeaPartyDBS\sql\debug\TeaParty_Script.PostDeployment.sql
 D:\Projects\TeaPartySolution\TeaPartyDBS\sql\debug\TeaParty_Database.sqlsettings
 D:\Projects\TeaPartySolution\TeaPartyDBS\sql\debug\TeaParty_Database.sqldeployment
 D:\Projects\TeaPartySolution\TeaPartyDBS\sql\debug\TeaParty_Database.sqlcmdvars
+D:\Projects\TeaPartySolution\TeaPartyDBS\sql\debug\TeaPartyDBS.deploymanifest
+D:\Projects\TeaPartySolution\TeaPartyDBS\sql\debug\TeaPartyDBS.dbschema
+D:\Projects\TeaPartySolution\TeaPartyDBS\obj\Debug\TeaPartyDBS.dbschema

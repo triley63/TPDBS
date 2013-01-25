@@ -31,3 +31,8 @@ INSERT INTO dbo.ContactType (description) VALUES ('Work Phone');
 INSERT INTO dbo.ContactType (description) VALUES ('Cell Phone');
 INSERT INTO dbo.ContactType (description) VALUES ('Other Phone');
 INSERT INTO dbo.ContactType (description) VALUES ('Email');
+-- =============================================
+-- Script Template
+-- =============================================
+
+INSERT INTO Survey.Survey (name) VALUES ('Tea Party - Third Party Proposition');

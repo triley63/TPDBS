@@ -114,6 +114,28 @@
     <Folder Include="Schema Objects\Database Level Objects\Storage\Full Text Catalogs\" />
     <Folder Include="Schema Objects\Database Level Objects\Storage\Partition Functions\" />
     <Folder Include="Schema Objects\Database Level Objects\Storage\Partition Schemes\" />
+    <Folder Include="Schema Objects\Schemas\Survey\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Programmability\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Programmability\Defaults\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Programmability\Functions\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Programmability\Rules\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Programmability\Stored Procedures\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Programmability\Types\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Programmability\Types\User Defined Data Types\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Programmability\Types\User Defined Types CLR\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Programmability\Types\User Defined Table Types\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Programmability\Types\XML Schema Collections\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Synonyms\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Tables\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Tables\Constraints\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Tables\Indexes\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Tables\Keys\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Tables\Triggers\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Tables\Statistics\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Views\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Views\Indexes\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Views\Triggers\" />
+    <Folder Include="Schema Objects\Schemas\Survey\Views\Statistics\" />
   </ItemGroup>
   <ItemGroup>
     <PropertiesFile Include="Properties\Database.sqlsettings">
@@ -149,9 +171,6 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\dbo.TeaPartyMember.fk_TeaPartyMember_TeaPartyID.fkey.sql">
-      <SubType>Code</SubType>
-    </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Tables\dbo.MemberImportData.table.sql">
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Tables\dbo.AddressType.table.sql">
@@ -193,6 +212,36 @@
     <Build Include="Schema Objects\Schemas\dbo\Tables\dbo.VoterCrossOver.table.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\dbo.AddImportData.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\dbo.UpsertAddress.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Database Level Objects\Security\Schemas\Survey.schema.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Survey\Tables\Survey.Survey.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Survey\Tables\Survey.Questions.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Survey\Tables\Survey.SurveyQuestions.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Survey\Tables\Keys\Survey.SurveyQuestions.fk_SurveyQuestions_Survey_SurveyID.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Survey\Tables\Keys\Survey.SurveyQuestions.fk_SurveyQuestions_Questions_QuestionID.fkey.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Survey\Tables\Survey.SurveyResults.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\Survey\Programmability\Stored Procedures\Survey.AddSurveyQuestion.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="Scripts\Post-Deployment\AddTeaPartyData.sql">
@@ -202,6 +251,9 @@
       <SubType>NotInBuild</SubType>
     </NotInBuild>
     <NotInBuild Include="Scripts\Post-Deployment\AddContactTypeData.sql">
+      <SubType>NotInBuild</SubType>
+    </NotInBuild>
+    <NotInBuild Include="Scripts\Post-Deployment\AddSurveyNames.sql">
       <SubType>NotInBuild</SubType>
     </NotInBuild>
   </ItemGroup>

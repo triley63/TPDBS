@@ -13,3 +13,4 @@ Post-Deployment Script Template
 :r .\AddTeaPartyData.sql
 :r .\AddAddressTypeData.sql
 :r .\AddContactTypeData.sql
+:r .\AddSurveyNames.sql

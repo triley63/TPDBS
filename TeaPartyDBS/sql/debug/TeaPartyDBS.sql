@@ -48,6 +48,15 @@ GO
 */
 
 GO
+PRINT N'Creating [Survey]...';
+
+
+GO
+CREATE SCHEMA [Survey]
+    AUTHORIZATION [dbo];
+
+
+GO
 PRINT N'Creating [dbo].[Address]...';
 
 
@@ -56,7 +65,7 @@ CREATE TABLE [dbo].[Address] (
     [addressID]   INT          IDENTITY (1, 1) NOT NULL,
     [address1]    VARCHAR (50) NULL,
     [address2]    VARCHAR (50) NULL,
-    [city]        VARCHAR (15) NULL,
+    [city]        VARCHAR (25) NULL,
     [state]       CHAR (2)     NULL,
     [zipCode]     VARCHAR (5)  NULL,
     [extendedZip] VARCHAR (4)  NULL,
@@ -97,18 +106,6 @@ CREATE TABLE [dbo].[ContactType] (
     [contactTypeID] INT          IDENTITY (1, 1) NOT NULL,
     [description]   VARCHAR (15) NOT NULL,
     PRIMARY KEY CLUSTERED ([contactTypeID] ASC) WITH (ALLOW_PAGE_LOCKS = ON, ALLOW_ROW_LOCKS = ON, PAD_INDEX = OFF, IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF)
-);
-
-
-GO
-PRINT N'Creating [dbo].[MemberImportData]...';
-
-
-GO
-CREATE TABLE [dbo].[MemberImportData] (
-    [memberImportDataID] INT          NOT NULL,
-    [firstName]          VARCHAR (50) NOT NULL,
-    [lastName]           VARCHAR (50) NOT NULL
 );
 
 
@@ -191,6 +188,57 @@ CREATE TABLE [dbo].[VoterCrossOver] (
 
 
 GO
+PRINT N'Creating [Survey].[Questions]...';
+
+
+GO
+CREATE TABLE [Survey].[Questions] (
+    [questionID] INT           IDENTITY (1, 1) NOT NULL,
+    [question]   VARCHAR (255) NOT NULL,
+    PRIMARY KEY CLUSTERED ([questionID] ASC) WITH (ALLOW_PAGE_LOCKS = ON, ALLOW_ROW_LOCKS = ON, PAD_INDEX = OFF, IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF)
+);
+
+
+GO
+PRINT N'Creating [Survey].[Survey]...';
+
+
+GO
+CREATE TABLE [Survey].[Survey] (
+    [surveyID] INT           IDENTITY (1, 1) NOT NULL,
+    [name]     VARCHAR (100) NOT NULL,
+    PRIMARY KEY CLUSTERED ([surveyID] ASC) WITH (ALLOW_PAGE_LOCKS = ON, ALLOW_ROW_LOCKS = ON, PAD_INDEX = OFF, IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF)
+);
+
+
+GO
+PRINT N'Creating [Survey].[SurveyQuestions]...';
+
+
+GO
+CREATE TABLE [Survey].[SurveyQuestions] (
+    [surveyQuestionsID] INT IDENTITY (1, 1) NOT NULL,
+    [surveyID]          INT NOT NULL,
+    [questionID]        INT NOT NULL,
+    PRIMARY KEY CLUSTERED ([surveyQuestionsID] ASC) WITH (ALLOW_PAGE_LOCKS = ON, ALLOW_ROW_LOCKS = ON, PAD_INDEX = OFF, IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF)
+);
+
+
+GO
+PRINT N'Creating [Survey].[SurveyResults]...';
+
+
+GO
+CREATE TABLE [Survey].[SurveyResults] (
+    [surveResultsID]    INT IDENTITY (1, 1) NOT NULL,
+    [voterID]           INT NOT NULL,
+    [surveyQuestionsID] INT NOT NULL,
+    [result]            INT NULL,
+    PRIMARY KEY CLUSTERED ([surveResultsID] ASC) WITH (ALLOW_PAGE_LOCKS = ON, ALLOW_ROW_LOCKS = ON, PAD_INDEX = OFF, IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF)
+);
+
+
+GO
 PRINT N'Creating fk_TeaPartyMember_TeaPartyID...';
 
 
@@ -263,6 +311,87 @@ ALTER TABLE [dbo].[VoterContactInfo] WITH NOCHECK
 
 
 GO
+PRINT N'Creating fk_SurveyQuestions_Questions_QuestionID...';
+
+
+GO
+ALTER TABLE [Survey].[SurveyQuestions] WITH NOCHECK
+    ADD CONSTRAINT [fk_SurveyQuestions_Questions_QuestionID] FOREIGN KEY ([questionID]) REFERENCES [Survey].[Questions] ([questionID]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
+GO
+PRINT N'Creating fk_SurveyQuestions_Survey_SurveyID...';
+
+
+GO
+ALTER TABLE [Survey].[SurveyQuestions] WITH NOCHECK
+    ADD CONSTRAINT [fk_SurveyQuestions_Survey_SurveyID] FOREIGN KEY ([surveyID]) REFERENCES [Survey].[Survey] ([surveyID]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
+GO
+PRINT N'Creating [dbo].[AddImportData]...';
+
+
+GO
+CREATE PROCEDURE dbo.AddImportData
+	@firstName varchar(50)
+	,@lastName varchar(50)
+	,@ID int OUTPUT
+AS
+BEGIN
+	INSERT INTO dbo.Voter (firstName, lastName)
+	VALUES (@firstName, @lastName);
+
+	SELECT @ID = SCOPE_IDENTITY();
+END
+GO
+PRINT N'Creating [dbo].[UpsertAddress]...';
+
+
+GO
+CREATE PROCEDURE dbo.UpsertAddress
+	@address1 varchar(50)
+	,@address2 varchar(50)
+	,@city varchar(25)
+	,@state varchar(2)
+	,@zip varchar(5)
+	,@extendedZip varchar(4)
+	,@addressID int = 0 OUTPUT
+AS
+BEGIN
+	SELECT @addressID = addressID
+	FROM dbo.Address
+	WHERE address1 = @address1
+		AND address2 = @address2
+		AND city = @city
+		AND state = @state
+		AND zipCode = @zip
+		AND extendedZip = @extendedZip
+
+	IF (@addressID = 0)
+	BEGIN
+		INSERT INTO dbo.Address (address1, address2, city, state, zipCode, extendedZip)
+		VALUES (@address1, @address2, @city, @state, @zip, @extendedZip);
+
+		SELECT @addressID = SCOPE_IDENTITY();
+	END
+END
+GO
+PRINT N'Creating [Survey].[AddSurveyQuestion]...';
+
+
+GO
+CREATE PROCEDURE Survey.AddSurveyQuestion
+	@surveyID int
+	,@question varchar(255)
+	,@questionID int OUTPUT
+AS
+BEGIN
+	INSERT INTO Survey.Questions (question) VALUES (@question);
+	
+	SELECT @questionID = SCOPE_IDENTITY();
+END
+GO
 -- Refactoring step to update target server with deployed transaction logs
 CREATE TABLE  [dbo].[__RefactorLog] (OperationKey UNIQUEIDENTIFIER NOT NULL PRIMARY KEY)
 GO
@@ -303,6 +432,11 @@ INSERT INTO dbo.ContactType (description) VALUES ('Work Phone');
 INSERT INTO dbo.ContactType (description) VALUES ('Cell Phone');
 INSERT INTO dbo.ContactType (description) VALUES ('Other Phone');
 INSERT INTO dbo.ContactType (description) VALUES ('Email');
+-- =============================================
+-- Script Template
+-- =============================================
+
+INSERT INTO Survey.Survey (name) VALUES ('Tea Party - Third Party Proposition');
 
 GO
 PRINT N'Checking existing data against newly created constraints';
@@ -328,6 +462,10 @@ ALTER TABLE [dbo].[VoterContactInfo] WITH CHECK CHECK CONSTRAINT [fk_VoterContac
 ALTER TABLE [dbo].[VoterContactInfo] WITH CHECK CHECK CONSTRAINT [fk_VoterContactInfo_ContactType_ContactTypeID];
 
 ALTER TABLE [dbo].[VoterContactInfo] WITH CHECK CHECK CONSTRAINT [fk_VoterContactInfo_Voter_VoterID];
+
+ALTER TABLE [Survey].[SurveyQuestions] WITH CHECK CHECK CONSTRAINT [fk_SurveyQuestions_Questions_QuestionID];
+
+ALTER TABLE [Survey].[SurveyQuestions] WITH CHECK CHECK CONSTRAINT [fk_SurveyQuestions_Survey_SurveyID];
 
 
 GO
